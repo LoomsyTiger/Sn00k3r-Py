@@ -113,44 +113,34 @@ def end_break(eob_score):
 initialize()
 
 # start game
-while (ball_count > 0):
-    # start break
+while ball_count > 0:
+    active_player, opponent = get_active_player()
+    active_player_name = players[active_player]["name"]
+    current_break = players[active_player]["current_break"]
+    opponent_name = players[opponent]["name"]
+
     while True:
-        active_player, opponent = get_active_player()
-        active_player_name = players[active_player]["name"]
-        current_break = players[active_player]["current_break"]
-        opponent_name = players[opponent]["name"]
-        print()
-        # scoreboard order is fixed so no variables are used
-        print("Current scores: ")
-        print(f"{players[1]["name"]}: {players[1]['score']}")
-        print(f"{players[2]["name"]}: {players[2]['score']}")
-        print()
-        print(f"Current break for player {active_player_name}: {current_break}")
-        print()
+        print("\nCurrent scores: ")
+        print(f"{players[1]['name']}: {players[1]['score']}")
+        print(f"{players[2]['name']}: {players[2]['score']}")
+        print(f"\nCurrent break for player {active_player_name}: {current_break}\n")
         print(f"Register action for {active_player_name}")
         print("Potted ball with 'p', foul with 'f' or miss 'm'.")
-        action = str(input()).lower()
-        # register pott
-        if (action == "p"):
+        
+        action = input().lower()
+
+        if action == "p":
             prev_potted_ball = register_pott()
-            continue
-        # register foul
-        elif (action == "f"):
-            register_foul()
-            # option to continue when fouled from snooker
-            print("End of break? y or n.")
-            answer = str(input()).lower()
-            if (answer == "y"):
-                eob_message = end_break(current_break)
-                print(eob_message)
-                break               
-        # register miss
-        elif (action == "m"):
-            eob_message = end_break(current_break)
-            print(eob_message)
             break
-        continue
+        elif action == "f":
+            register_foul()
+            if input("End of break? y or n: ").lower() == "y":
+                print(end_break(current_break))
+                break
+        elif action == "m":
+            print(end_break(current_break))
+            break
+
 
 else:
     print("Game over.")
