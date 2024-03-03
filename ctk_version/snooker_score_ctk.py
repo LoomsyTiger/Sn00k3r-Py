@@ -42,6 +42,15 @@ gui = ctk.CTk()
 gui.title("Snooker Scoreboard")
 gui.geometry("800x600")
 
+def initialize():
+    dialog = ctk.CTkInputDialog(text="Type your name", title="Player 1")
+    players[1]["name"] = dialog.get_input()
+    dialog = ctk.CTkInputDialog(text="Type your name", title="Player 2")
+    players[2]["name"] = dialog.get_input()
+    # match_lineu   p = (f"{players[1]['name']} versus {players[2]['name']}.")
+
+initialize()
+
 # Handle ball click
 def on_ball_click(ball_color):
     register_pott(ball_color)
@@ -82,13 +91,6 @@ create_other_button("End of break", "White")
 # ---
 # Functions for game logic
 # ---
-
-def initialize():
-    dialog = ctk.CTkInputDialog(text="Type your name", title="Player 1")
-    players[1]["name"] = dialog.get_input()
-    dialog = ctk.CTkInputDialog(text="Type your name", title="Player 2")
-    players[2]["name"] = dialog.get_input()
-    # match_lineu   p = (f"{players[1]['name']} versus {players[2]['name']}.")
 
 def get_ball_value(color):
     points = ball_values[color]
