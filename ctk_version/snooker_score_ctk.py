@@ -189,22 +189,4 @@ active_player_name = players[active_player]["name"]
 current_break = players[active_player]["current_break"]
 opponent_name = players[opponent]["name"]
 
-gui.mainloop()
-if (ball_count == 0):
-    winner, score, is_tie = end_game()
-    if is_tie == True:
-        ball_count += 1
-else:
-    while True:
-        action = input().lower()
-        if action == "p":
-            prev_potted_ball = register_pott()
-            break
-        elif action == "f":
-            register_foul()
-            if input("End of break? y or n: ").lower() == "y":
-                print(end_break(current_break))
-                break
-        elif action == "m":
-            print(end_break(current_break))
-            break
+gui.mainloop()         
