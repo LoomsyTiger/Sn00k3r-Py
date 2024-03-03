@@ -113,45 +113,50 @@ def respotted_black():
     ball_count += 1
     
 def end_game():
-    # Check for a tie
-    if players[1]["score"] == players[2]["score"]:
-        return respotted_black()
+    if players[1]["score"] > players[2]["score"]:
+        return players[1]["name"], players[1]["score"], False
+    elif players[1]["score"] < players[2]["score"]:
+        return players[2]["name"], players[2]["score"], False
+    else:
+        # Tie situation
+        respotted_black()
+        return "Tie", None, True
     
-    # Find the winner
-    winner = max((1, 2), key=lambda p: players[p]["score"])
-    return players[winner]["name"], players[winner]["score"]
-
+def game_summary():
+    return "Done."
 
 initialize()
 
 # start game
-while ball_count > 0:
+while ball_count >= 0:
     active_player, opponent = get_active_player()
     active_player_name = players[active_player]["name"]
     current_break = players[active_player]["current_break"]
     opponent_name = players[opponent]["name"]
+    if (ball_count == 0):
+        winner, score, is_tie = end_game()
+    else:
+        while True:
+            print("\nCurrent scores: ")
+            print(f"{players[1]['name']}: {players[1]['score']}")
+            print(f"{players[2]['name']}: {players[2]['score']}")
+            print(f"\nCurrent break for player {active_player_name}: {current_break}\n")
+            print(f"Register action for {active_player_name}")
+            print("Potted ball with 'p', foul with 'f' or miss 'm'.")
+            
+            action = input().lower()
 
-    while True:
-        print("\nCurrent scores: ")
-        print(f"{players[1]['name']}: {players[1]['score']}")
-        print(f"{players[2]['name']}: {players[2]['score']}")
-        print(f"\nCurrent break for player {active_player_name}: {current_break}\n")
-        print(f"Register action for {active_player_name}")
-        print("Potted ball with 'p', foul with 'f' or miss 'm'.")
-        
-        action = input().lower()
-
-        if action == "p":
-            prev_potted_ball = register_pott()
-            break
-        elif action == "f":
-            register_foul()
-            if input("End of break? y or n: ").lower() == "y":
+            if action == "p":
+                prev_potted_ball = register_pott()
+                break
+            elif action == "f":
+                register_foul()
+                if input("End of break? y or n: ").lower() == "y":
+                    print(end_break(current_break))
+                    break
+            elif action == "m":
                 print(end_break(current_break))
                 break
-        elif action == "m":
-            print(end_break(current_break))
-            break
 else:
-    winner, score = end_game()
-    print(f"And the winner is: {winner} with {score} points.")
+    summary = game_summary()
+    print(f"{summary}")
