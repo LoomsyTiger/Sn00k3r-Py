@@ -6,6 +6,7 @@ import customtkinter as ctk
 
 ball_count = 21
 turn_counter = 1
+game_history = []
 break_history = []
 
 ball_values = {
@@ -101,19 +102,28 @@ def get_active_player():
     else:
         active_player, opponent = 2, 1
         return active_player, opponent
+    
+def update_scores():
+    gui_player1_score.configure(text=f"Score: {players[1]['score']}")
+    gui_player2_score.configure(text=f"Score: {players[2]['score']}")
+
+def update_log():
+    gui_history = ""
 
 def point_addition(points, legality):
     if (legality == "legal"):
         players[active_player]["score"] += points
         players[active_player]["current_break"] += points
-        
+        update_scores()
     elif (legality == "foul"):
         # snooker has a minimum penalty of 4 points        
         if (points < 4):
             players[opponent]["score"] += 4
+            update_scores()
             return 4
         elif (points >= 4):
             players[opponent]["score"] += points
+            update_scores()
             return points
 
 def register_pott(potted_ball):
@@ -128,6 +138,7 @@ def register_pott(potted_ball):
         point_addition(points_added, "legal")
         ball_count -= 1
         break_history.append(potted_ball)
+        game_history.append(f"{potted_ball} potted by {active_player_name}.")
     else:
         register_foul(potted_ball)
 
