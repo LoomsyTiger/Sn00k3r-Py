@@ -37,6 +37,11 @@ players = {
         "max_break": 0
     }
 }
+game_stats = {
+    "winner_name": "",
+    "winner_score": 0,
+    "highest_break": 0
+}
 
 def get_active_player():
     global active_player, opponent
@@ -75,6 +80,9 @@ active_player, opponent = get_active_player()
 active_player_name = players[active_player]["name"]
 current_break = players[active_player]["current_break"]
 opponent_name = players[opponent]["name"]
+gui_message = f"{active_player_name} to break."
+highest_break = ctk.CTkLabel(gui, text="Highest Break: 0", font=("Arial", 14))
+highest_break.pack(pady=20)
 
 # ---
 # Functions for TKinter stuff
@@ -101,11 +109,8 @@ def update_scores():
     gui_player1_score.configure(text=f"Score: {players[1]['score']}")
     gui_player2_score.configure(text=f"Score: {players[2]['score']}")
 
-def update_log():
-    gui_history = ""
-
-highest_break = ctk.CTkLabel(gui, text="Highest Break: 0", font=("Arial", 14))
-highest_break.pack(pady=20)
+def update_log(fstring):
+    game_history.append(fstring)
 
 # Create snooker ball buttons
 create_ball_button("Red", "Red")
@@ -120,7 +125,6 @@ create_ball_button("Black", "Black")
 create_general_button("Foul", "Red")
 create_general_button("End of break", "White")
 create_general_button("End game now", "Red")
-
 
 # ---
 # Functions for game logic
@@ -148,17 +152,14 @@ def point_addition(points, legality):
 
 def register_pott(potted_ball):
     global ball_count, break_history
-    # Check if it's the first pott
     first_pott = not break_history
-    # If it's not the first pott, get the previous ball
     previous_ball = (break_history[-1] if break_history else None)
-    # Check if potting order is legal
     if (first_pott) or (potted_ball != previous_ball):
         points_added = get_ball_value(potted_ball)
         point_addition(points_added, "legal")
         ball_count -= 1
         break_history.append(potted_ball)
-        game_history.append(f"{potted_ball} potted by {active_player_name}.")
+        update_log(f"{potted_ball} potted by {active_player_name}.")
     else:
         register_foul(potted_ball)
 
@@ -173,18 +174,18 @@ def register_foul(potted_ball=None):
         penalty = point_addition(fouled_ball_value, "foul")
         return penalty
 
-def end_break(eob_score):
+def end_break():
     global turn_counter, break_history
     turn_counter += 1
     if (current_break > players[active_player]["max_break"]):
-        players[active_player]["max_break"] = eob_score
+        players[active_player]["max_break"] = current_break
         players[active_player]["current_break"] = 0
         break_history.clear()
-        return (f"New highest break for {players[active_player]['name']} {eob_score} points.")
+        update_log(f"New highest break for {players[active_player]['name']} {current_break} points.")
     else:
         players[active_player]["current_break"] = 0
         break_history.clear()
-        return (f"End of break. Points: {eob_score}")
+        update_log(f"End of break. Points: {current_break}")
     
 def end_game():
     if players[1]["score"] > players[2]["score"]:
@@ -196,7 +197,7 @@ def end_game():
         return "Tie", None, True
     
 def game_summary():
-    return "Done."
+    update_log(f"Game over. Winner: {game_stats['winner_name']} with {game_stats['winner_score']}.\nHighest break: {game_stats['highest_break']}.")
 
 #
 # Starting game
