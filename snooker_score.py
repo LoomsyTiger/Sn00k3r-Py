@@ -1,3 +1,9 @@
+import customtkinter as ctk
+from interface import GUI
+
+root = ctk.Tk()
+GUI(root)
+
 ball_count = 21
 turn_counter = 1
 break_history = []
