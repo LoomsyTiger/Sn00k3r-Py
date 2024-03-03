@@ -1,4 +1,4 @@
-ball_count = 1
+ball_count = 21
 turn_counter = 1
 break_history = []
 
@@ -14,13 +14,13 @@ ball_values = {
 players = {
     1: {
         "name": "",
-        "score": 50,
+        "score": 0,
         "current_break": 0,
         "max_break": 0
     },
     2: {
         "name": "",
-        "score": 49,
+        "score": 0,
         "current_break": 0,
         "max_break": 0
     }
