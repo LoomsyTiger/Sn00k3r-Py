@@ -32,7 +32,7 @@ def initialize():
     players[1]["name"] = str(input())
     print("Player two, add your name: ")
     players[2]["name"] = str(input())
-    match_lineup = (f"{players[1]["name"]} versus {players[2]['name']}.")
+    match_lineup = (f"{players[1]['name']} versus {players[2]['name']}.")
     print(match_lineup)
     print(players[1]["name"] + " to break.")
 
