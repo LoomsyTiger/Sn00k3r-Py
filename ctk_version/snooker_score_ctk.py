@@ -160,11 +160,6 @@ def end_break(eob_score):
         break_history.clear()
         return (f"End of break. Points: {eob_score}")
     
-def respotted_black():
-    global ball_count
-    print("It's a tie! Respotted black.")
-    ball_count += 1
-    
 def end_game():
     if players[1]["score"] > players[2]["score"]:
         return players[1]["name"], players[1]["score"], False
@@ -172,7 +167,6 @@ def end_game():
         return players[2]["name"], players[2]["score"], False
     else:
         # Tie situation
-        respotted_black()
         return "Tie", None, True
     
 def game_summary():
@@ -192,6 +186,8 @@ while ball_count >= 0:
     opponent_name = players[opponent]["name"]
     if (ball_count == 0):
         winner, score, is_tie = end_game()
+        if is_tie == True:
+            ball_count += 1
     else:
         while True:
             print("\nCurrent scores: ")
