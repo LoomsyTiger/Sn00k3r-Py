@@ -1,7 +1,12 @@
 import customtkinter as ctk
 
+# Initialize the main application window
+gui = ctk.CTk()
+gui.title("Snooker Scoreboard")
+gui.geometry("800x600")
+
 # ---
-# Global variables for game logic
+# Global variables and functions for game logic
 # ---
 
 ball_count = 21
@@ -33,43 +38,71 @@ players = {
     }
 }
 
-# ---
-# GUI Setup in CustomTkinter
-# ---
+def get_active_player():
+    global active_player, opponent
+    if (turn_counter % 2 == 0):
+        active_player, opponent = 1, 2
+        return active_player, opponent
+    else:
+        active_player, opponent = 2, 1
+        return active_player, opponent
 
-# Initialize the main application window
-gui = ctk.CTk()
-gui.title("Snooker Scoreboard")
-gui.geometry("800x600")
+# ---
+# Initialize game with player info
+# ---
 
 def initialize():
     dialog = ctk.CTkInputDialog(text="Type your name", title="Player 1")
     players[1]["name"] = dialog.get_input()
     dialog = ctk.CTkInputDialog(text="Type your name", title="Player 2")
     players[2]["name"] = dialog.get_input()
-    # match_lineu   p = (f"{players[1]['name']} versus {players[2]['name']}.")
+    # match_lineup = (f"{players[1]['name']} versus {players[2]['name']}.")
 
 initialize()
 
-# Handle ball click
+# Player information labels
+gui_player1_name = ctk.CTkLabel(gui, text=f"{players[1]['name']}", font=("Arial", 16))
+gui_player1_name.pack(pady=10)
+gui_player1_score = ctk.CTkLabel(gui, text=f"Score: {players[1]['score']}", font=("Arial", 14))
+gui_player1_score.pack()
+
+gui_player2_name = ctk.CTkLabel(gui, text=f"{players[2]['name']}", font=("Arial", 16))
+gui_player2_name.pack(pady=10)
+gui_player2_score = ctk.CTkLabel(gui, text=f"Score: {players[2]['name']}", font=("Arial", 14))
+gui_player2_score.pack()
+
+active_player, opponent = get_active_player()
+active_player_name = players[active_player]["name"]
+current_break = players[active_player]["current_break"]
+opponent_name = players[opponent]["name"]
+
+# ---
+# Functions for TKinter stuff
+# ---
+
 def on_ball_click(ball_color):
     register_pott(ball_color)
 
-def on_other_click(label):
+def on_general_click(label):
     if label == "Foul":
         register_foul()
     elif label == "End of break":
         end_break()
 
-# Create ball button
 def create_ball_button(ball_color, color):
-    button = ctk.CTkButton(gui, text=ball_color, command=lambda: on_ball_click(ball_color), fg_color=color, hover_color=color)
+    button = ctk.CTkButton(gui, text=ball_color, command=lambda: on_ball_click(ball_color), fg_color=color, hover_color="White")
     button.pack(pady=5)
 
-# Create other button
-def create_other_button(label, color):
-    button = ctk.CTkButton(gui, text=label, command=lambda: on_other_click(label), fg_color=color, hover_color=color)
+def create_general_button(label, color):
+    button = ctk.CTkButton(gui, text=label, command=lambda: on_general_click(label), fg_color=color, hover_color="White", compound="bottom")
     button.pack(pady=5)
+
+def update_scores():
+    gui_player1_score.configure(text=f"Score: {players[1]['score']}")
+    gui_player2_score.configure(text=f"Score: {players[2]['score']}")
+
+def update_log():
+    gui_history = ""
 
 highest_break = ctk.CTkLabel(gui, text="Highest Break: 0", font=("Arial", 14))
 highest_break.pack(pady=20)
@@ -83,9 +116,10 @@ create_ball_button("Blue", "Blue")
 create_ball_button("Pink", "Pink")
 create_ball_button("Black", "Black")
 
-# Create other buttons
-create_other_button("Foul", "Red")
-create_other_button("End of break", "White")
+# Create general buttons
+create_general_button("Foul", "Red")
+create_general_button("End of break", "White")
+create_general_button("End game now", "Red")
 
 
 # ---
@@ -95,22 +129,6 @@ create_other_button("End of break", "White")
 def get_ball_value(color):
     points = ball_values[color]
     return points
-
-def get_active_player():
-    global active_player, opponent
-    if (turn_counter % 2 == 0):
-        active_player, opponent = 1, 2
-        return active_player, opponent
-    else:
-        active_player, opponent = 2, 1
-        return active_player, opponent
-    
-def update_scores():
-    gui_player1_score.configure(text=f"Score: {players[1]['score']}")
-    gui_player2_score.configure(text=f"Score: {players[2]['score']}")
-
-def update_log():
-    gui_history = ""
 
 def point_addition(points, legality):
     if (legality == "legal"):
@@ -180,26 +198,8 @@ def end_game():
 def game_summary():
     return "Done."
 
-# ---
+#
 # Starting game
-# ---
-
-initialize()
-
-# Player information labels
-gui_player1_name = ctk.CTkLabel(gui, text=f"{players[1]['name']}", font=("Arial", 16))
-gui_player1_name.pack(pady=10)
-gui_player1_score = ctk.CTkLabel(gui, text=f"Score: {players[1]['score']}", font=("Arial", 14))
-gui_player1_score.pack()
-
-gui_player2_name = ctk.CTkLabel(gui, text=f"{players[2]['name']}", font=("Arial", 16))
-gui_player2_name.pack(pady=10)
-gui_player2_score = ctk.CTkLabel(gui, text=f"Score: {players[2]['name']}", font=("Arial", 14))
-gui_player2_score.pack()
-
-active_player, opponent = get_active_player()
-active_player_name = players[active_player]["name"]
-current_break = players[active_player]["current_break"]
-opponent_name = players[opponent]["name"]
+#
 
 gui.mainloop()         
