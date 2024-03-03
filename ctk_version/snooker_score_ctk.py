@@ -1,8 +1,52 @@
 import customtkinter as ctk
-from interface import GUI
 
-root = ctk.Tk()
-GUI(root)
+# ---
+# GUI Setup in CustomTkinter
+# ---
+
+# Initialize the main application window
+gui = ctk.CTk()
+gui.title("Snooker Scoreboard")
+gui.geometry("800x600")
+
+# Handle ball click
+def on_ball_click(color):
+    # Implement the logic for scoring based on the color
+    # For example, adding score to player 1 for now
+    score = {"Red": 1, "Yellow": 2, "Green": 3, "Brown": 4, "Blue": 5, "Pink": 6, "Black": 7}
+    update_score(1, score[color])
+
+# Create ball button
+def create_ball_button(color_name, color):
+    button = ctk.CTkButton(gui, text=color_name, command=lambda: on_ball_click(color), fg_color=color, hover_color=color)
+    button.pack(pady=5)
+
+# Player information labels
+player1_name = ctk.CTkLabel(gui, text="Player 1", font=("Arial", 16))
+player1_name.pack(pady=10)
+player1_score = ctk.CTkLabel(gui, text="Score: 0", font=("Arial", 14))
+player1_score.pack()
+
+player2_name = ctk.CTkLabel(gui, text="Player 2", font=("Arial", 16))
+player2_name.pack(pady=10)
+player2_score = ctk.CTkLabel(gui, text="Score: 0", font=("Arial", 14))
+player2_score.pack()
+
+highest_break = ctk.CTkLabel(gui, text="Highest Break: 0", font=("Arial", 14))
+highest_break.pack(pady=20)
+
+# Create snooker ball buttons
+create_ball_button("Red", "Red")
+create_ball_button("Yellow", "Yellow")
+create_ball_button("Green", "Green")
+create_ball_button("Brown", "Brown")
+create_ball_button("Blue", "Blue")
+create_ball_button("Pink", "Pink")
+create_ball_button("Black", "Black")
+
+# ---
+# Global variables for game logic
+# ---
 
 ball_count = 21
 turn_counter = 1
@@ -32,15 +76,18 @@ players = {
     }
 }
 
+# ---
+# Functions for game logic
+# ---
+
 def initialize():
     print("Welcome!")
     print("Player one, add your name: ")
-    players[1]["name"] = str(input())
-    print("Player two, add your name: ")
-    players[2]["name"] = str(input())
-    match_lineup = (f"{players[1]['name']} versus {players[2]['name']}.")
-    print(match_lineup)
-    print(players[1]["name"] + " to break.")
+    dialog = ctk.CTkInputDialog(text="Type your name", title="Player 1")
+    players[1]["name"] = dialog.get_input()
+    dialog = ctk.CTkInputDialog(text="Type your name", title="Player 2")
+    players[2]["name"] = dialog.get_input()
+    # match_lineu   p = (f"{players[1]['name']} versus {players[2]['name']}.")
 
 def get_ball_value(color):
     points = ball_values[color.lower()]
@@ -131,9 +178,13 @@ def end_game():
 def game_summary():
     return "Done."
 
-initialize()
+# ---
+# Starting game
+# ---
 
-# start game
+initialize()
+gui.mainloop()
+
 while ball_count >= 0:
     active_player, opponent = get_active_player()
     active_player_name = players[active_player]["name"]
