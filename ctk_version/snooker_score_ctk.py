@@ -163,6 +163,9 @@ def register_pott(potted_ball):
     else:
         register_foul(potted_ball)
 
+    if ball_count == 0:
+        end_game()
+
 def register_foul(potted_ball=None):
     if (potted_ball == None):
         fouled_ball = ctk.CTkInputDialog(text="What ball was on?", title="Register foul")
@@ -186,21 +189,27 @@ def end_break():
         players[active_player]["current_break"] = 0
         break_history.clear()
         update_log(f"End of break. Points: {current_break}")
+
+def respotted_black():
+    return
     
 def end_game():
     if players[1]["score"] > players[2]["score"]:
-        return players[1]["name"], players[1]["score"], False
+        game_stats["winner_name"] = players[1]["name"]
+        game_stats["winner_score"] = players[1]["score"]
+        game_summary()
     elif players[1]["score"] < players[2]["score"]:
-        return players[2]["name"], players[2]["score"], False
+        game_stats["winner_name"] = players[2]["name"]
+        game_stats["winner_score"] = players[2]["score"]
+        game_summary()
     else:
-        # Tie situation
         return "Tie", None, True
     
 def game_summary():
     update_log(f"Game over. Winner: {game_stats['winner_name']} with {game_stats['winner_score']}.\nHighest break: {game_stats['highest_break']}.")
 
 #
-# Starting game
+# Start app
 #
 
 gui.mainloop()         
