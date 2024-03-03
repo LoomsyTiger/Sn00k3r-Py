@@ -1,4 +1,5 @@
 import customtkinter as ctk
+import snooker_score_ctk as score
 
 class SnookerUI(ctk.CTk):
 
@@ -39,7 +40,8 @@ class SnookerUI(ctk.CTk):
 
     def on_ball_click(self, color):
         # Logic when a ball is clicked
-        print(f"{color} ball clicked")
+        if color == "Red":
+            score.register_pott
 
 if __name__ == "__main__":
     app = SnookerUI()
