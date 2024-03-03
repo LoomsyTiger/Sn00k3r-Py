@@ -1,5 +1,5 @@
-ball_count = 21
-turn_counter = 0
+ball_count = 1
+turn_counter = 1
 break_history = []
 
 ball_values = {
@@ -14,13 +14,13 @@ ball_values = {
 players = {
     1: {
         "name": "",
-        "score": 0,
+        "score": 50,
         "current_break": 0,
         "max_break": 0
     },
     2: {
         "name": "",
-        "score": 0,
+        "score": 49,
         "current_break": 0,
         "max_break": 0
     }
@@ -67,13 +67,10 @@ def register_pott():
     global ball_count, break_history
     print("What color?")
     potted_ball = str(input()).lower()
-
     # Check if it's the first pott
     first_pott = not break_history
-
     # If it's not the first pott, get the previous ball
     previous_ball = (break_history[-1] if break_history else None)
-
     # Check if potting order is legal
     if (first_pott) or (potted_ball != previous_ball):
         points_added = get_ball_value(potted_ball)
@@ -109,6 +106,21 @@ def end_break(eob_score):
         players[active_player]["current_break"] = 0
         break_history.clear()
         return (f"End of break. Points: {eob_score}")
+    
+def respotted_black():
+    global ball_count
+    print("It's a tie! Respotted black.")
+    ball_count += 1
+    
+def end_game():
+    # Check for a tie
+    if players[1]["score"] == players[2]["score"]:
+        return respotted_black()
+    
+    # Find the winner
+    winner = max((1, 2), key=lambda p: players[p]["score"])
+    return players[winner]["name"], players[winner]["score"]
+
 
 initialize()
 
@@ -140,8 +152,6 @@ while ball_count > 0:
         elif action == "m":
             print(end_break(current_break))
             break
-
-
 else:
-    print("Game over.")
-    print("Results:")
+    winner, score = end_game()
+    print(f"And the winner is: {winner} with {score} points.")
