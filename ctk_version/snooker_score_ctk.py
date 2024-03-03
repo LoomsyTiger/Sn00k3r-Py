@@ -9,13 +9,13 @@ turn_counter = 1
 break_history = []
 
 ball_values = {
-    "red": 1,
-    "yellow": 2,
-    "green": 3,
-    "brown": 4,
-    "blue": 5,
-    "pink": 6,
-    "black": 7
+    "Red": 1,
+    "Yellow": 2,
+    "Green": 3,
+    "Brown": 4,
+    "Blue": 5,
+    "Pink": 6,
+    "Black": 7
 }
 players = {
     1: {
@@ -61,17 +61,6 @@ def create_other_button(label, color):
     button = ctk.CTkButton(gui, text=label, command=lambda: on_other_click(label), fg_color=color, hover_color=color)
     button.pack(pady=5)
 
-# Player information labels
-gui_player1_name = ctk.CTkLabel(gui, text="Player 1", font=("Arial", 16))
-gui_player1_name.pack(pady=10)
-gui_player1_score = ctk.CTkLabel(gui, text="Score: 0", font=("Arial", 14))
-gui_player1_score.pack()
-
-gui_player2_name = ctk.CTkLabel(gui, text="Player 2", font=("Arial", 16))
-gui_player2_name.pack(pady=10)
-gui_player2_score = ctk.CTkLabel(gui, text="Score: 0", font=("Arial", 14))
-gui_player2_score.pack()
-
 highest_break = ctk.CTkLabel(gui, text="Highest Break: 0", font=("Arial", 14))
 highest_break.pack(pady=20)
 
@@ -101,7 +90,7 @@ def initialize():
     # match_lineu   p = (f"{players[1]['name']} versus {players[2]['name']}.")
 
 def get_ball_value(color):
-    points = ball_values[color.lower()]
+    points = ball_values[color]
     return points
 
 def get_active_player():
@@ -117,7 +106,7 @@ def point_addition(points, legality):
     if (legality == "legal"):
         players[active_player]["score"] += points
         players[active_player]["current_break"] += points
-        return points
+        
     elif (legality == "foul"):
         # snooker has a minimum penalty of 4 points        
         if (points < 4):
@@ -183,6 +172,17 @@ def game_summary():
 # ---
 
 initialize()
+
+# Player information labels
+gui_player1_name = ctk.CTkLabel(gui, text=f"{players[1]['name']}", font=("Arial", 16))
+gui_player1_name.pack(pady=10)
+gui_player1_score = ctk.CTkLabel(gui, text=f"Score: {players[1]['score']}", font=("Arial", 14))
+gui_player1_score.pack()
+
+gui_player2_name = ctk.CTkLabel(gui, text=f"{players[2]['name']}", font=("Arial", 16))
+gui_player2_name.pack(pady=10)
+gui_player2_score = ctk.CTkLabel(gui, text=f"Score: {players[2]['name']}", font=("Arial", 14))
+gui_player2_score.pack()
 
 active_player, opponent = get_active_player()
 active_player_name = players[active_player]["name"]
