@@ -5,6 +5,7 @@ gui = ctk.CTk()
 gui.title("Snooker Scoreboard")
 gui.geometry("800x600")
 
+
 # ---
 # Global variables and functions for game logic
 # ---
@@ -67,14 +68,14 @@ initialize()
 
 # Player information labels
 gui_player1_name = ctk.CTkLabel(gui, text=f"{players[1]['name']}", font=("Arial", 16))
-gui_player1_name.pack(pady=10)
+gui_player1_name.grid(row=1,column=1)
 gui_player1_score = ctk.CTkLabel(gui, text=f"Score: {players[1]['score']}", font=("Arial", 14))
-gui_player1_score.pack()
+gui_player1_score.grid(row=1,column=2)
 
 gui_player2_name = ctk.CTkLabel(gui, text=f"{players[2]['name']}", font=("Arial", 16))
-gui_player2_name.pack(pady=10)
+gui_player2_name.grid(row=1,column=5)
 gui_player2_score = ctk.CTkLabel(gui, text=f"Score: {players[2]['name']}", font=("Arial", 14))
-gui_player2_score.pack()
+gui_player2_score.grid(row=1,column=6)
 
 active_player, opponent = get_active_player()
 active_player_name = players[active_player]["name"]
@@ -82,7 +83,7 @@ current_break = players[active_player]["current_break"]
 opponent_name = players[opponent]["name"]
 gui_message = f"{active_player_name} to break."
 highest_break = ctk.CTkLabel(gui, text="Highest Break: 0", font=("Arial", 14))
-highest_break.pack(pady=20)
+highest_break.grid(row=1,column=4)
 
 # ---
 # Functions for TKinter stuff
@@ -97,14 +98,6 @@ def on_general_click(label):
     elif label == "End of break":
         end_break()
 
-def create_ball_button(ball_color, color):
-    button = ctk.CTkButton(gui, text=ball_color, command=lambda: on_ball_click(ball_color), fg_color=color, hover_color="White")
-    button.pack(pady=5)
-
-def create_general_button(label, color):
-    button = ctk.CTkButton(gui, text=label, command=lambda: on_general_click(label), fg_color=color, hover_color="White", compound="bottom")
-    button.pack(pady=5)
-
 def update_scores():
     gui_player1_score.configure(text=f"Score: {players[1]['score']}")
     gui_player2_score.configure(text=f"Score: {players[2]['score']}")
@@ -112,19 +105,26 @@ def update_scores():
 def update_log(fstring):
     game_history.append(fstring)
 
+def create_button(gui, event, button_color, row, column):
+    text_color = "White" if event not in ["Pink", "Yellow", "End game", "Red", "End of break", "Foul"] else "Black"
+    button = ctk.CTkButton(gui, text=event, command=lambda: on_ball_click(button_color), fg_color=button_color, hover_color=button_color, text_color=text_color)
+    button.grid(row=row, column=column, padx=5, pady=5)
+    return button
+
 # Create snooker ball buttons
-create_ball_button("Red", "Red")
-create_ball_button("Yellow", "Yellow")
-create_ball_button("Green", "Green")
-create_ball_button("Brown", "Brown")
-create_ball_button("Blue", "Blue")
-create_ball_button("Pink", "Pink")
-create_ball_button("Black", "Black")
+button_red_ball = create_button(gui, "Red", "Red", 2, 3)
+button_yellow_ball = create_button(gui, "Yellow", "Yellow", 3, 2)
+button_green_ball = create_button(gui, "Green", "Green", 4, 2)
+button_brown_ball = create_button(gui, "Brown", "Brown", 5, 2)
+button_blue_ball = create_button(gui, "Blue", "Blue", 3, 4)
+button_pink_ball = create_button(gui, "Pink", "Pink", 4, 4)
+button_black_ball = create_button(gui, "Black", "Black", 5, 4)
 
 # Create general buttons
-create_general_button("Foul", "Red")
-create_general_button("End of break", "White")
-create_general_button("End game now", "Red")
+button_foul = create_button(gui, "Foul", "White", 7, 2)
+button_eob = create_button(gui, "End of break", "White", 7, 3)
+button_end_game = create_button(gui, "End game", "Red", 7, 4)
+
 
 # ---
 # Functions for game logic
