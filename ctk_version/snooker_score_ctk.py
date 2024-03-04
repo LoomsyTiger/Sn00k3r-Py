@@ -89,10 +89,10 @@ highest_break.grid(row=1,column=4)
 # Functions for TKinter stuff
 # ---
 
-def on_ball_click(ball_color):
+def on_ball_click(ball_color:str):
     register_pott(ball_color)
 
-def on_general_click(label):
+def on_general_click(label:str):
     if label == "Foul":
         register_foul()
     elif label == "End of break":
@@ -102,10 +102,10 @@ def update_scores():
     gui_player1_score.configure(text=f"Score: {players[1]['score']}")
     gui_player2_score.configure(text=f"Score: {players[2]['score']}")
 
-def update_log(fstring):
+def update_log(fstring:str):
     game_history.append(fstring)
 
-def create_button(gui, event, button_color, row, column):
+def create_button(gui, event:str, button_color:str, row:int, column:int):
     text_color = "White" if event not in ["Pink", "Yellow", "End game", "Red", "End of break", "Foul"] else "Black"
     button = ctk.CTkButton(gui, text=event, command=lambda: on_ball_click(button_color), fg_color=button_color, hover_color=button_color, text_color=text_color)
     button.grid(row=row, column=column, padx=5, pady=5)
@@ -130,11 +130,11 @@ button_end_game = create_button(gui, "End game", "Red", 7, 4)
 # Functions for game logic
 # ---
 
-def get_ball_value(color):
+def get_ball_value(color:str):
     points = ball_values[color]
     return points
 
-def point_addition(points, legality):
+def point_addition(points:int, legality:str):
     if (legality == "legal"):
         players[active_player]["score"] += points
         players[active_player]["current_break"] += points
@@ -150,7 +150,7 @@ def point_addition(points, legality):
             update_scores()
             return points
 
-def register_pott(potted_ball):
+def register_pott(potted_ball:str):
     global ball_count, break_history
     first_pott = not break_history
     previous_ball = (break_history[-1] if break_history else None)
@@ -166,7 +166,7 @@ def register_pott(potted_ball):
     if ball_count == 0:
         end_game()
 
-def register_foul(potted_ball=None):
+def register_foul(potted_ball:str=None):
     if (potted_ball == None):
         fouled_ball = ctk.CTkInputDialog(text="What ball was on?", title="Register foul")
         fouled_ball_value = get_ball_value(fouled_ball.lower())
