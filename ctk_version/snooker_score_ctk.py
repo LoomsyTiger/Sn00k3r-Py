@@ -5,7 +5,6 @@ gui = ctk.CTk()
 gui.title("Snooker Scoreboard")
 gui.geometry("800x600")
 
-
 # ---
 # Global variables and functions for game logic
 # ---
@@ -105,26 +104,30 @@ def update_scores():
 def update_log(fstring:str):
     game_history.append(fstring)
 
-def create_button(gui, event:str, button_color:str, row:int, column:int):
+def create_button(gui, type:str ,event:str, button_color:str, row:int, column:int):
     text_color = "White" if event not in ["Pink", "Yellow", "End game", "Red", "End of break", "Foul"] else "Black"
-    button = ctk.CTkButton(gui, text=event, command=lambda: on_ball_click(button_color), fg_color=button_color, hover_color=button_color, text_color=text_color)
+
+    if type == "Ball":
+        button = ctk.CTkButton(gui, text=event, command=lambda: on_ball_click(event), fg_color=button_color, hover_color=button_color, text_color=text_color)
+    elif type == "Sys":
+        button = ctk.CTkButton(gui, text=event, command=lambda: on_general_click(event), fg_color=button_color, hover_color=button_color, text_color=text_color)
+    
     button.grid(row=row, column=column, padx=5, pady=5)
     return button
 
 # Create snooker ball buttons
-button_red_ball = create_button(gui, "Red", "Red", 2, 3)
-button_yellow_ball = create_button(gui, "Yellow", "Yellow", 3, 2)
-button_green_ball = create_button(gui, "Green", "Green", 4, 2)
-button_brown_ball = create_button(gui, "Brown", "Brown", 5, 2)
-button_blue_ball = create_button(gui, "Blue", "Blue", 3, 4)
-button_pink_ball = create_button(gui, "Pink", "Pink", 4, 4)
-button_black_ball = create_button(gui, "Black", "Black", 5, 4)
+button_red_ball = create_button(gui, "Ball", "Red", "Red", 2, 3)
+button_yellow_ball = create_button(gui, "Ball", "Yellow", "Yellow", 3, 2)
+button_green_ball = create_button(gui, "Ball", "Green", "Green", 4, 2)
+button_brown_ball = create_button(gui, "Ball", "Brown", "Brown", 5, 2)
+button_blue_ball = create_button(gui, "Ball","Blue", "Blue", 3, 4)
+button_pink_ball = create_button(gui, "Ball", "Pink", "Pink", 4, 4)
+button_black_ball = create_button(gui, "Ball", "Black", "Black", 5, 4)
 
 # Create general buttons
-button_foul = create_button(gui, "Foul", "White", 7, 2)
-button_eob = create_button(gui, "End of break", "White", 7, 3)
-button_end_game = create_button(gui, "End game", "Red", 7, 4)
-
+button_foul = create_button(gui, "Sys", "Foul", "White", 7, 2)
+button_eob = create_button(gui, "Sys", "End of break", "White", 7, 3)
+button_end_game = create_button(gui, "Sys", "End game", "Red", 7, 4)
 
 # ---
 # Functions for game logic
@@ -171,11 +174,12 @@ def register_foul(potted_ball:str=None):
         fouled_ball = ctk.CTkInputDialog(text="What ball was on?", title="Register foul")
         fouled_ball_value = get_ball_value(fouled_ball.lower())
         penalty = point_addition(fouled_ball_value, "foul")
-        return penalty
     else:
         fouled_ball_value = get_ball_value(potted_ball)
         penalty = point_addition(fouled_ball_value, "foul")
-        return penalty
+
+    update_log(f"Penalty {penalty} added to {opponent_name}.")
+
 
 def end_break():
     global turn_counter, break_history
@@ -184,14 +188,16 @@ def end_break():
         players[active_player]["max_break"] = current_break
         players[active_player]["current_break"] = 0
         break_history.clear()
-        update_log(f"New highest break for {players[active_player]['name']} {current_break} points.")
+        update_log(f"New highest break for {players[active_player]['name']}: {current_break} points.")
     else:
         players[active_player]["current_break"] = 0
         break_history.clear()
-        update_log(f"End of break. Points: {current_break}")
+        update_log(f"End of break. Total score this break: {current_break}")
 
 def respotted_black():
-    return
+    global ball_count
+    ball_count += 1
+    update_log(f"It's a tie. Respot the black ball.")
     
 def end_game():
     if players[1]["score"] > players[2]["score"]:
@@ -203,7 +209,7 @@ def end_game():
         game_stats["winner_score"] = players[2]["score"]
         game_summary()
     else:
-        return "Tie", None, True
+        respotted_black()
     
 def game_summary():
     update_log(f"Game over. Winner: {game_stats['winner_name']} with {game_stats['winner_score']}.\nHighest break: {game_stats['highest_break']}.")
