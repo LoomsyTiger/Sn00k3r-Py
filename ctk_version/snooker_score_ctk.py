@@ -91,11 +91,13 @@ highest_break.grid(row=1,column=4)
 def on_ball_click(ball_color:str):
     register_pott(ball_color)
 
-def on_general_click(label:str):
-    if label == "Foul":
+def on_general_click(event:str):
+    if event == "Foul":
         register_foul()
-    elif label == "End of break":
+    elif event == "End of break":
         end_break()
+    elif event == "End game":
+        end_game()
 
 def update_scores():
     gui_player1_score.configure(text=f"Score: {players[1]['score']}")
@@ -138,6 +140,7 @@ def get_ball_value(color:str):
     return points
 
 def point_addition(points:int, legality:str):
+    active_player, opponent = get_active_player()
     if (legality == "legal"):
         players[active_player]["score"] += points
         players[active_player]["current_break"] += points
