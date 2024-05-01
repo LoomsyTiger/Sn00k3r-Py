@@ -3,7 +3,11 @@ import customtkinter as ctk
 # Initialize the main application window
 gui = ctk.CTk()
 gui.title("Snooker Scoreboard")
-gui.geometry("800x600")
+# gui.geometry("800x600")
+gui.columnconfigure(0)
+
+gui.columnconfigure((0,1,3,4,5,6,7,8), weight=1)
+gui.rowconfigure((0,1,3,4,5,6,7,8,9), weight=1)
 
 # ---
 # Global variables and functions for game logic
@@ -56,15 +60,12 @@ def get_active_player():
 # Initialize game with player info
 # ---
 
-def update_log(fstring:str):
-    game_history.append(fstring)
-
 def initialize():
     dialog = ctk.CTkInputDialog(text="Type your name", title="Player 1")
     players[1]["name"] = dialog.get_input()
     dialog = ctk.CTkInputDialog(text="Type your name", title="Player 2")
     players[2]["name"] = dialog.get_input()
-    update_log(f"{players[1]['name']} versus {players[2]['name']}.")
+    game_history.append(f"{players[1]['name']} versus {players[2]['name']}.")
 
 initialize()
 
@@ -76,17 +77,17 @@ gui_player1_score.grid(row=1,column=2)
 
 gui_player2_name = ctk.CTkLabel(gui, text=f"{players[2]['name']}", font=("Arial", 16))
 gui_player2_name.grid(row=1,column=5)
-gui_player2_score = ctk.CTkLabel(gui, text=f"Score: {players[2]['name']}", font=("Arial", 14))
+gui_player2_score = ctk.CTkLabel(gui, text=f"Score: {players[2]['score']}", font=("Arial", 14))
 gui_player2_score.grid(row=1,column=6)
 
 active_player, opponent = get_active_player()
 active_player_name = players[active_player]["name"]
 current_break = players[active_player]["current_break"]
 opponent_name = players[opponent]["name"]
-gui_message = ctk.CTkLabel(gui, text=f"{game_history[-1]}", font=("Arial", 14))
+gui_message = ctk.CTkLabel(gui, text=f"{game_history[-1]}", font=("Arial", 14), wraplength=150)
 gui_message.grid(row=10,column=4)
-highest_break = ctk.CTkLabel(gui, text="Highest Break: 0", font=("Arial", 14))
-highest_break.grid(row=1,column=4)
+# highest_break = ctk.CTkLabel(gui, text=f"Highest Break: {highest_break}", font=("Arial", 14))
+# highest_break.grid(row=1,column=4)
 
 # ---
 # Functions for TKinter stuff
@@ -106,7 +107,11 @@ def on_general_click(event:str):
 def update_scores():
     gui_player1_score.configure(text=f"Score: {players[1]['score']}")
     gui_player2_score.configure(text=f"Score: {players[2]['score']}")
-    gui_message.configure(text=f"{game_history[-1]}")
+    
+def update_log(fstring:str):
+    game_history.append(fstring)
+    gui_message.configure(text=f"{fstring}")
+   
 
 def create_button(gui, type:str, event:str, button_color:str, row:int, column:int):
     text_color = "White" if event not in ["Pink", "Yellow", "End game", "Red", "End of break", "Foul"] else "Black"
@@ -116,7 +121,7 @@ def create_button(gui, type:str, event:str, button_color:str, row:int, column:in
     elif type == "Sys":
         button = ctk.CTkButton(gui, text=event, command=lambda: on_general_click(event), fg_color=button_color, hover_color=button_color, text_color=text_color)
     
-    button.grid(row=row, column=column, padx=5, pady=5)
+    button.grid(row=row, column=column, padx=5, pady=5, sticky='nsew')
     return button
 
 # Create snooker ball buttons
