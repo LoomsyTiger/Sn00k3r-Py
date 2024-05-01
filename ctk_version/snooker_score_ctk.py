@@ -56,12 +56,15 @@ def get_active_player():
 # Initialize game with player info
 # ---
 
+def update_log(fstring:str):
+    game_history.append(fstring)
+
 def initialize():
     dialog = ctk.CTkInputDialog(text="Type your name", title="Player 1")
     players[1]["name"] = dialog.get_input()
     dialog = ctk.CTkInputDialog(text="Type your name", title="Player 2")
     players[2]["name"] = dialog.get_input()
-    # match_lineup = (f"{players[1]['name']} versus {players[2]['name']}.")
+    update_log(f"{players[1]['name']} versus {players[2]['name']}.")
 
 initialize()
 
@@ -80,7 +83,8 @@ active_player, opponent = get_active_player()
 active_player_name = players[active_player]["name"]
 current_break = players[active_player]["current_break"]
 opponent_name = players[opponent]["name"]
-gui_message = f"{active_player_name} to break."
+gui_message = ctk.CTkLabel(gui, text=f"{game_history[-1]}", font=("Arial", 14))
+gui_message.grid(row=10,column=4)
 highest_break = ctk.CTkLabel(gui, text="Highest Break: 0", font=("Arial", 14))
 highest_break.grid(row=1,column=4)
 
@@ -102,9 +106,7 @@ def on_general_click(event:str):
 def update_scores():
     gui_player1_score.configure(text=f"Score: {players[1]['score']}")
     gui_player2_score.configure(text=f"Score: {players[2]['score']}")
-
-def update_log(fstring:str):
-    game_history.append(fstring)
+    gui_message.configure(text=f"{game_history[-1]}")
 
 def create_button(gui, type:str, event:str, button_color:str, row:int, column:int):
     text_color = "White" if event not in ["Pink", "Yellow", "End game", "Red", "End of break", "Foul"] else "Black"
@@ -183,7 +185,6 @@ def register_foul(potted_ball:str=None):
 
     update_log(f"Penalty {penalty} added to {opponent_name}.")
 
-
 def end_break():
     global turn_counter, break_history
     turn_counter += 1
@@ -221,4 +222,4 @@ def game_summary():
 # Start app
 #
 
-gui.mainloop()         
+gui.mainloop()
