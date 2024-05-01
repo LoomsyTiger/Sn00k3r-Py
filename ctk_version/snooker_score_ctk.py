@@ -118,18 +118,18 @@ def create_button(gui, type:str, event:str, button_color:str, row:int, column:in
     return button
 
 # Create snooker ball buttons
-button_red_ball = create_button(gui=gui, type="Ball", event="Red", button_color="Red", row=2, column=3)
-button_yellow_ball = create_button(gui=gui, type="Ball", event="Yellow", button_color="Yellow", row=3, column=2)
-button_green_ball = create_button(gui=gui, type="Ball", event="Green", button_color="Green", row=4, column=2)
-button_brown_ball = create_button(gui=gui, type="Ball", event="Brown", button_color="Brown", row=5, column=2)
-button_blue_ball = create_button(gui=gui, type="Ball", event="Blue", button_color="Blue", row=3, column=4)
-button_pink_ball = create_button(gui=gui, type="Ball", event="Pink", button_color="Pink", row=4, column=4)
-button_black_ball = create_button(gui=gui, type="Ball", event="Black", button_color="Black", row=5, column=4)
+button_red_ball = create_button(gui=gui, type="Ball", event="Red", button_color="Red", row=3, column=4)
+button_yellow_ball = create_button(gui=gui, type="Ball", event="Yellow", button_color="Yellow", row=4, column=3)
+button_green_ball = create_button(gui=gui, type="Ball", event="Green", button_color="Green", row=5, column=3)
+button_brown_ball = create_button(gui=gui, type="Ball", event="Brown", button_color="Brown", row=6, column=3)
+button_blue_ball = create_button(gui=gui, type="Ball", event="Blue", button_color="Blue", row=4, column=5)
+button_pink_ball = create_button(gui=gui, type="Ball", event="Pink", button_color="Pink", row=5, column=5)
+button_black_ball = create_button(gui=gui, type="Ball", event="Black", button_color="Black", row=6, column=5)
 
 # Create general buttons
-button_foul = create_button(gui, "Sys", "Foul", "White", 7, 2)
-button_eob = create_button(gui, "Sys", "End of break", "White", 7, 3)
-button_end_game = create_button(gui, "Sys", "End game", "Red", 7, 4)
+button_foul = create_button(gui=gui, type="Sys", event="Foul", button_color="White", row=8, column=3)
+button_eob = create_button(gui=gui, type="Sys", event="End of break", button_color="White", row=8, column=4)
+button_end_game = create_button(gui=gui, type="Sys", event="End game", button_color="Red", row=8, column=5)
 
 # ---
 # Functions for game logic
