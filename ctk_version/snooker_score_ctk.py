@@ -106,7 +106,7 @@ def update_scores():
 def update_log(fstring:str):
     game_history.append(fstring)
 
-def create_button(gui, type:str ,event:str, button_color:str, row:int, column:int):
+def create_button(gui, type:str, event:str, button_color:str, row:int, column:int):
     text_color = "White" if event not in ["Pink", "Yellow", "End game", "Red", "End of break", "Foul"] else "Black"
 
     if type == "Ball":
@@ -118,13 +118,13 @@ def create_button(gui, type:str ,event:str, button_color:str, row:int, column:in
     return button
 
 # Create snooker ball buttons
-button_red_ball = create_button(gui, "Ball", "Red", "Red", 2, 3)
-button_yellow_ball = create_button(gui, "Ball", "Yellow", "Yellow", 3, 2)
-button_green_ball = create_button(gui, "Ball", "Green", "Green", 4, 2)
-button_brown_ball = create_button(gui, "Ball", "Brown", "Brown", 5, 2)
-button_blue_ball = create_button(gui, "Ball","Blue", "Blue", 3, 4)
-button_pink_ball = create_button(gui, "Ball", "Pink", "Pink", 4, 4)
-button_black_ball = create_button(gui, "Ball", "Black", "Black", 5, 4)
+button_red_ball = create_button(gui=gui, type="Ball", event="Red", button_color="Red", row=2, column=3)
+button_yellow_ball = create_button(gui=gui, type="Ball", event="Yellow", button_color="Yellow", row=3, column=2)
+button_green_ball = create_button(gui=gui, type="Ball", event="Green", button_color="Green", row=4, column=2)
+button_brown_ball = create_button(gui=gui, type="Ball", event="Brown", button_color="Brown", row=5, column=2)
+button_blue_ball = create_button(gui=gui, type="Ball", event="Blue", button_color="Blue", row=3, column=4)
+button_pink_ball = create_button(gui=gui, type="Ball", event="Pink", button_color="Pink", row=4, column=4)
+button_black_ball = create_button(gui=gui, type="Ball", event="Black", button_color="Black", row=5, column=4)
 
 # Create general buttons
 button_foul = create_button(gui, "Sys", "Foul", "White", 7, 2)
